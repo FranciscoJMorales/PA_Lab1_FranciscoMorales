@@ -57,6 +57,9 @@ namespace PA_Lab1_Francisco_Morales_1223319 {
 	private: System::Windows::Forms::Label^  label4;
 	private: System::Windows::Forms::Button^  bin_Btn;
 	private: System::Windows::Forms::TextBox^  binarioTbx;
+	private: System::Windows::Forms::CheckBox^ archivoCheck;
+	private: System::Windows::Forms::CheckBox^  archivoCbx;
+
 
 
 
@@ -85,6 +88,7 @@ namespace PA_Lab1_Francisco_Morales_1223319 {
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->bin_Btn = (gcnew System::Windows::Forms::Button());
 			this->binarioTbx = (gcnew System::Windows::Forms::TextBox());
+			this->archivoCbx = (gcnew System::Windows::Forms::CheckBox());
 			this->SuspendLayout();
 			// 
 			// fibonacciTbx
@@ -192,11 +196,23 @@ namespace PA_Lab1_Francisco_Morales_1223319 {
 			this->binarioTbx->Size = System::Drawing::Size(100, 20);
 			this->binarioTbx->TabIndex = 8;
 			// 
+			// archivoCbx
+			// 
+			this->archivoCbx->AutoSize = true;
+			this->archivoCbx->Location = System::Drawing::Point(38, 281);
+			this->archivoCbx->Name = L"archivoCbx";
+			this->archivoCbx->Size = System::Drawing::Size(134, 17);
+			this->archivoCbx->TabIndex = 12;
+			this->archivoCbx->Text = L"Obtener desde archivo";
+			this->archivoCbx->UseVisualStyleBackColor = true;
+			this->archivoCbx->CheckedChanged += gcnew System::EventHandler(this, &MyForm::archivoCbx_CheckedChanged);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(471, 354);
+			this->Controls->Add(this->archivoCbx);
 			this->Controls->Add(this->bin_Lbl);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->bin_Btn);
@@ -243,9 +259,44 @@ namespace PA_Lab1_Francisco_Morales_1223319 {
 		fac_Lbl->Text = System::Convert::ToString(recursividadObj->Factorial(n));
 	}
 	private: System::Void bin_Btn_Click(System::Object^  sender, System::EventArgs^  e) {
-		int n = System::Convert::ToInt32(binarioTbx->Text);
 		Recursividad^ recursividadObj = gcnew Recursividad();
-		bin_Lbl->Text = recursividadObj->Binario(n);
+		if (archivoCbx->Checked) {
+			try {
+				//Leer archivo
+				StreamReader^ streamReader = gcnew StreamReader("..//Entrada.txt");
+				String^ contenidoArchivo = streamReader->ReadToEnd();
+				streamReader->Close();
+				System::Windows::Forms::MessageBox::Show(contenidoArchivo, "Texto obtenido");
+				String^ binario = "";
+				contenidoArchivo += ";";
+				while (contenidoArchivo->IndexOf(";") > 0) {
+					binario += recursividadObj->Binario(System::Convert::ToInt32(contenidoArchivo->Substring(0, contenidoArchivo->IndexOf(";")))) + ";";
+					contenidoArchivo = contenidoArchivo->Remove(0, contenidoArchivo->IndexOf(";") + 1);
+				}
+				binario = binario->Remove(binario->Length - 1);
+				//Escribir archivo
+				StreamWriter^ streamWriter = gcnew StreamWriter("..//Salida.txt");
+				streamWriter->WriteLine(binario);
+				streamWriter->Close();
+				System::Windows::Forms::MessageBox::Show(binario, "Conversión a binario");
+				System::Windows::Forms::MessageBox::Show("La conversión fue realizada y guardada exitosamente.");
+			} catch (...) {
+				System::Windows::Forms::MessageBox::Show("Ocurrió un error durante la conversión. Revisar formato del archivo de entrada");
+			}
+		}
+		else {
+			int n = System::Convert::ToInt32(binarioTbx->Text);
+			bin_Lbl->Text = recursividadObj->Binario(n);
+		}
 	}
-	};
+	private: System::Void archivoCbx_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+		if (archivoCbx->Checked) {
+			binarioTbx->Enabled = false;
+			binarioTbx->Clear();
+		}
+		else {
+			binarioTbx->Enabled = true;
+		}
+	}
+};
 }
