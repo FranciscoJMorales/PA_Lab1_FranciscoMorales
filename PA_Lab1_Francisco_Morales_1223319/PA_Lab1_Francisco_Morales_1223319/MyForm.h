@@ -245,7 +245,7 @@ namespace PA_Lab1_Francisco_Morales_1223319 {
 	private: System::Void bin_Btn_Click(System::Object^  sender, System::EventArgs^  e) {
 		int n = System::Convert::ToInt32(binarioTbx->Text);
 		Recursividad^ recursividadObj = gcnew Recursividad();
-		bin_Lbl->Text = System::Convert::ToString(recursividadObj->Binario(n, 0));
+		bin_Lbl->Text = recursividadObj->Binario(n);
 	}
 	};
 }

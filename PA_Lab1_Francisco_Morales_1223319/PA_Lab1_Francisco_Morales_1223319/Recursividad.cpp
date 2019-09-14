@@ -22,22 +22,14 @@ int Recursividad::Factorial(int n) {
 	}
 }
 
-int Recursividad::Binario(int n, int r) {
+System::String^Recursividad::Binario(int n) {
 
 	if (n / 2 == 0) {
-		return (1 * Potencia(10, r));
+		return "1";
 	}
 	else {
-		return (Binario(n / 2, r + 1) + ((n % 2) * Potencia(10, r)));
+		return (Binario(n / 2) + (System::Convert::ToString(n % 2)));
 	}
-}
-
-int Recursividad::Potencia(int x, int n) {
-	if (n > 0) {
-		return (x * Potencia(x, n - 1));
-	}
-	else
-		return 1;
 }
 /*
 System::String^ObtenerArchivoRuta(System::String^ ruta) {

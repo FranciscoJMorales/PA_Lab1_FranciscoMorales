@@ -9,10 +9,9 @@ public:
 public:
 	int Factorial(int n);
 public:
-	int Binario(int n, int r);
+	System::String^Binario(int n);
+/*
 public:
-	int Potencia(int x, int n);
-	/*public:
 	System::String^ObtenerArchivoRuta(System::String^ ruta);
 	*/
 };
