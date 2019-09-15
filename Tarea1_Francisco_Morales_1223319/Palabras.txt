@@ -1,0 +1,1 @@
+lobo;radar;reconocer;leer;solos
